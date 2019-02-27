@@ -7,6 +7,7 @@ class Info extends Component {
         return(
             <div>
                 <h1>Teste</h1>
+                <button onClick={() => this.props.loadData()}>testando</button>
             </div>
         )
     }

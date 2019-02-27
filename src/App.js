@@ -6,7 +6,7 @@ import Info from './info'
 import axios from 'axios'
 
 import createSagaMiddleware from 'redux-saga'
-import { put } from 'redux-saga/effects'
+import { put, takeEvery } from 'redux-saga/effects'
 import { loadDataSuccess } from './action'
 
 const sagaMiddleware = createSagaMiddleware()
@@ -15,17 +15,20 @@ const store = createStore(
   reducers,
   applyMiddleware(sagaMiddleware)
   )
-//generators function *
-function *ola(){
-  console.log('Hello Sparta')
-}
 
-function *teste(){
+function *getIP(){
   const dados = yield axios.get('https://httpbin.davecheney.com/ip')
   // console.log(dados)
   yield put(loadDataSuccess(dados.data.origin))
 }
-sagaMiddleware.run(teste, ola)
+
+//generators function *
+function *index(){
+  console.log('Hello Sparta')
+  yield takeEvery('LOAD_DATA_REQUEST', getIP)
+}
+
+sagaMiddleware.run(index)
 
 class App extends Component {
   render() {
